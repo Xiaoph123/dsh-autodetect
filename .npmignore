@@ -1,0 +1,9 @@
+tests/
+node_modules/
+python/__pycache__/
+*.pyc
+*.autodetect.bak
+.git/
+.gitignore
+.npmignore
+

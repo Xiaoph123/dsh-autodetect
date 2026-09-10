@@ -1,0 +1,6 @@
+node_modules/
+python/__pycache__/
+tests/__pycache__/
+*.pyc
+*.autodetect.bak
+

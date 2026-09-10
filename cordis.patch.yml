@@ -1,0 +1,4 @@
+# Mount AutoDetect into the DSH web profile.
+- insert:
+    - id: dsh-autodetect
+      name: dsh-autodetect
