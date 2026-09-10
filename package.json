@@ -2,6 +2,31 @@
   "name": "dsh-autodetect",
   "version": "0.1.0",
   "description": "Encoding-safe Windows script viewer for the official DSH sidebar",
+  "keywords": [
+    "deepseek",
+    "harness",
+    "dsh",
+    "plugin",
+    "sidebar",
+    "encoding",
+    "windows"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Xiaoph123/dsh-autodetect.git"
+  },
+  "homepage": "https://github.com/Xiaoph123/dsh-autodetect#readme",
+  "bugs": {
+    "url": "https://github.com/Xiaoph123/dsh-autodetect/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node --test tests/test_package.mjs && py -3 -m unittest discover -s tests",
+    "pack:check": "npm pack --dry-run"
+  },
   "type": "module",
   "main": "./lib/index.js",
   "exports": {

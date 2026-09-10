@@ -1,101 +1,113 @@
 # AutoDetect
 
-AutoDetect 是一个面向 DeepSeek Harness Web 的 Windows 文本文件查看与编辑插件。
+<p align="center">
+  <strong>DeepSeek Harness Web 官方侧边栏的 Windows 编码安全文件查看器</strong><br>
+  <sub>在官方文件标签页中查看和编辑脚本，同时保留原始编码、BOM 与换行格式。</sub>
+</p>
 
-它可以在工作区中直接查看和编辑以下文件，并尽量保留文件原有的编码、BOM 和换行格式：
+<p align="center">
+  <a href="https://github.com/Xiaoph123/dsh-autodetect"><img src="https://img.shields.io/badge/DeepSeek-Harness%20Web-4b6bfb" alt="DeepSeek Harness Web"></a>
+  <a href="https://www.npmjs.com/package/dsh-autodetect"><img src="https://img.shields.io/npm/v/dsh-autodetect" alt="npm version"></a>
+  <a href="https://github.com/Xiaoph123/dsh-autodetect/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license"></a>
+</p>
 
-- `.bat`
-- `.cmd`
-- `.ini`
-- `.vbs`
-- `.ps1`
+> [!IMPORTANT]
+> **适配边界**：本项目是 **DeepSeek Harness Web 官方侧边栏插件**，使用 DSH 官方 `client-runtime`、`client-ui-slots` 和 `client-ui-sidebar-right` 扩展接口。它**不适配第三方 DeepSeek 侧边栏、浏览器扩展、桌面客户端或其他非 Harness Web 宿主**。
 
-插件名称为 **AutoDetect**，npm/DSH 包名为 `dsh-autodetect`。
+## 为什么需要 AutoDetect？
 
-## 功能特性
+Windows 工具链里，`.bat`、`.cmd`、`.ini`、`.vbs` 和 `.ps1` 经常混用 UTF-8、UTF-16、GBK、GB18030 与不同换行格式。AutoDetect 让这些文件直接出现在 Harness Web 的官方右侧文件标签页中，编辑后尽量按原格式写回。
 
-- 使用 `charset_normalizer` 检测文件编码
-- 支持 UTF-8、UTF-16、UTF-32、GBK、GB18030、CP1252、Shift-JIS 等常见编码
-- 自动识别 BOM 和换行格式（LF、CRLF、CR）
-- 二进制文件自动识别并禁止编辑
-- 保存前校验文件 SHA-256，避免覆盖外部修改
-- 保存前创建 `.autodetect.bak` 备份文件
-- 使用临时文件和原子替换写入，降低写入中断导致文件损坏的风险
-- 限制文件只能访问当前会话工作区，拒绝越权路径
-- 支持通过 `AUTODETECT_PYTHON` 指定 Python 解释器
+## 功能
 
-## 环境要求
-
-- DeepSeek Harness Web
-- Node.js
-- Python 3.10 或更高版本
-- Python 依赖：`charset-normalizer >= 3.4, < 4`
+| 能力 | 说明 |
+| --- | --- |
+| 编码检测 | UTF-8、UTF-16、UTF-32、GBK、GB18030、CP1252、Shift-JIS 等 |
+| 格式保留 | 识别并保留 BOM 与 LF、CRLF、CR 换行 |
+| 文件保护 | 二进制文件禁止编辑；路径限制在当前会话工作区 |
+| 并发保护 | 保存前校验 SHA-256，检测磁盘外部修改 |
+| 可靠写入 | 保存前生成 `.autodetect.bak`，使用临时文件和原子替换 |
+| 对话协作 | 选中文本后可添加到当前 Harness 对话 |
 
 ## 安装
 
-### 1. 安装 Python 依赖
+### 推荐：通过 npm 包安装
 
-请使用 DeepSeek Harness 实际运行时会调用的 Python 解释器安装依赖：
-
-```powershell
-python -m pip install -r requirements.txt
-```
-
-如果系统中有多个 Python，可以显式指定解释器：
+先确认已安装 Node.js、Python 3.10+ 和 DeepSeek Harness Web。发布到 npm 后，推荐直接执行这一条命令：
 
 ```powershell
-C:\Path\To\python.exe -m pip install -r requirements.txt
+dsh plugin --profile web install dsh-autodetect --replace --yes
 ```
 
-也可以通过环境变量指定解释器：
+`dsh` 会从 npm 获取 `dsh-autodetect`，并把它注册到 **Harness Web 官方侧边栏**。安装或更新后重启 Harness Web。
+
+如果你的 `dsh` 版本不支持从 npm 包名解析，也可以先下载包再使用本地目录：
+
+```powershell
+npm install dsh-autodetect
+dsh plugin --profile web install .\node_modules\dsh-autodetect --replace --yes
+```
+
+> 如果当前版本的 `dsh` CLI 不接受 npm 包名，请使用兼容方式：
+>
+> ```powershell
+> git clone https://github.com/Xiaoph123/dsh-autodetect.git
+> dsh plugin --profile web install .\dsh-autodetect --replace --yes
+> ```
+
+### 开发链接安装
+
+```powershell
+git clone https://github.com/Xiaoph123/dsh-autodetect.git
+cd dsh-autodetect
+dsh plugin --profile web install . --link --replace --yes
+```
+
+### Python 依赖
+
+插件后端需要 `charset-normalizer`：
+
+```powershell
+py -3 -m pip install -r requirements.txt
+```
+
+如果 Harness 使用的不是默认 Python，可以指定：
 
 ```powershell
 $env:AUTODETECT_PYTHON = 'C:\Path\To\python.exe'
 ```
 
-验证依赖是否可用：
-
-```powershell
-python -c "import charset_normalizer; print(charset_normalizer.__version__)"
-```
-
-### 2. 安装插件
-
-在插件目录的上级目录执行本地安装命令：
-
-```powershell
-dsh plugin --profile web install .\AutoDetect --replace --yes
-```
-
-如果希望直接使用当前目录进行开发调试，可以使用链接安装：
-
-```powershell
-dsh plugin --profile web install .\AutoDetect --link --replace --yes
-```
-
-安装或更新插件后，请重启 DeepSeek Harness Web，使插件重新加载。
-
-## 使用方法
+## 使用
 
 1. 启动 DeepSeek Harness Web。
-2. 打开一个 `.bat`、`.cmd`、`.ini`、`.vbs` 或 `.ps1` 文件。
-3. AutoDetect 会自动检测编码并显示文件内容。
-4. 修改内容后，使用工具栏中的保存操作写回文件。
+2. 在工作区打开 `.bat`、`.cmd`、`.ini`、`.vbs` 或 `.ps1` 文件。
+3. AutoDetect 会在官方右侧文件标签页中检测编码并显示内容。
+4. 修改后使用宿主工具栏或插件的保存按钮写回文件。
 
-保存时会沿用读取时记录的编码、BOM 和换行格式。文件被其他程序修改后，保存会被拒绝，需要重新加载文件。
+保存会沿用读取时的编码、BOM 和换行格式。如果文件在编辑期间被其他程序修改，保存会被拒绝，请重新加载后再操作。
+
+## 工作原理
+
+插件由两个部分组成：
+
+- **Node.js Host**：注册 `/autodetect/api/read` 和 `/autodetect/api/write`，执行会话工作区校验、SHA-256 并发检查和备份。
+- **Python Codec Helper**：读取原始字节，检测编码、BOM 和换行格式，并按元数据原子写回。
+
+客户端通过 Harness 官方 Sidebar slots 注册文件标签页，只匹配 `dsh-resource://file/**` 下的目标扩展名。
 
 ## 项目结构
 
 ```text
-AutoDetect/
+dsh-autodetect/
 ├─ lib/
-│  ├─ index.js             # Web Server 路由和 Python Helper 调用
-│  └─ client.js             # Harness 官方 Sidebar 文件标签页界面
+│  ├─ index.js             # Host 路由和 Python Helper 调用
+│  └─ client.js            # Harness 官方 Sidebar 文件标签页
 ├─ python/
-│  └─ autodetect_codec.py   # 编码检测、读取和写入
+│  └─ autodetect_codec.py  # 编码检测、读取和写入
 ├─ tests/
-│  └─ test_codec.py         # 编码与文件写入测试
-├─ cordis.patch.yml         # DSH Web 插件挂载配置
+│  ├─ test_codec.py        # 编码与文件写入测试
+│  └─ test_package.mjs     # npm 元数据和 README 回归测试
+├─ cordis.patch.yml        # DSH Web 插件挂载配置
 ├─ package.json
 ├─ requirements.txt
 └─ README.md
@@ -103,41 +115,49 @@ AutoDetect/
 
 ## 开发与测试
 
-运行 Python 测试：
-
 ```powershell
-python -m unittest discover -s tests
-```
-
-检查 Python 语法：
-
-```powershell
-python -m py_compile python\autodetect_codec.py
-```
-
-检查 Node.js 语法：
-
-```powershell
+npm test
+npm run pack:check
 node --check lib\index.js
 ```
 
-## 工作原理
+`npm run pack:check` 会检查最终 npm 包内容，不会把 `node_modules`、Python 缓存或备份文件打进去。
 
-Node.js 后端为插件注册两个内部接口：
+## 发布
 
-- `GET /autodetect/api/read`
-- `POST /autodetect/api/write`
+维护者登录 npm 后执行：
 
-接口接收会话工作区和相对路径，由 Python Helper 读取原始字节并完成编码检测。写入时，Node.js 先校验当前文件的 SHA-256，然后创建备份，最后由 Python Helper 按原编码和换行格式原子写回。
+```powershell
+npm login
+npm publish --access public
+```
 
-## 注意事项
+发布新版本前先更新 `package.json` 中的版本号，并运行：
 
-- `charset-normalizer` 是必需依赖，不建议删除或替换。
-- Python 依赖必须安装到插件实际使用的解释器中。
-- 插件只允许访问当前会话工作区内的文件。
-- 二进制文件不会被当作文本编辑。
-- `.autodetect.bak` 是保存时生成的备份文件，请根据需要纳入或排除版本控制。
+```powershell
+npm version patch
+npm run pack:check
+npm publish --access public
+```
+
+## 常见问题
+
+### 安装后看不到文件标签页
+
+确认宿主是 **DeepSeek Harness Web**，插件安装目标是 `--profile web`，并重启 Harness Web。第三方侧边栏不在支持范围内。
+
+### 保存时报文件已被修改
+
+这是 SHA-256 并发保护触发。重新打开文件、确认内容后再保存，避免覆盖其他程序的修改。
+
+### Python 依赖找不到
+
+使用 Harness 实际调用的 Python 解释器安装 `requirements.txt`，必要时设置 `AUTODETECT_PYTHON`。
 
 ## 许可证
 
-本项目的许可证以仓库根目录中的许可证文件为准。
+[MIT License](LICENSE)
+
+## 反馈与贡献
+
+欢迎通过 [GitHub Issues](https://github.com/Xiaoph123/dsh-autodetect/issues) 提交问题。反馈时请注明 Harness Web 版本、Node.js/Python 版本，以及是否使用了官方侧边栏宿主。
