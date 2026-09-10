@@ -11,7 +11,7 @@
   },
   "files": [
     "lib",
-    "python",
+    "python/autodetect_codec.py",
     "requirements.txt",
     "README.md"
   ],
