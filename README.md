@@ -37,7 +37,7 @@ Windows 工具链里，`.bat`、`.cmd`、`.ini`、`.vbs` 和 `.ps1` 经常混用
 当前 TypeScript 版本 `0.2.0` 已发布到 [npm](https://www.npmjs.com/package/dsh-autodetect)。它不再需要 Python；先确认已安装 Node.js 和 DeepSeek Harness Web，然后推荐直接执行这一条命令：
 
 ```powershell
-dsh plugin --profile web install dsh-autodetect --replace --yes
+dsh plugin --profile web add dsh-autodetect
 ```
 
 `dsh` 会从 npm 获取 `dsh-autodetect`，并把它注册到 **Harness Web 官方侧边栏**。安装或更新后重启 Harness Web。
@@ -46,7 +46,7 @@ dsh plugin --profile web install dsh-autodetect --replace --yes
 
 ```powershell
 npm install dsh-autodetect
-dsh plugin --profile web install .\node_modules\dsh-autodetect --replace --yes
+dsh plugin --profile web add .\node_modules\dsh-autodetect
 ```
 
 ### 开发链接安装
@@ -54,7 +54,7 @@ dsh plugin --profile web install .\node_modules\dsh-autodetect --replace --yes
 ```powershell
 git clone https://github.com/Xiaoph123/dsh-autodetect.git
 cd dsh-autodetect
-dsh plugin --profile web install . --link --replace --yes
+dsh plugin --profile web add .
 ```
 
 ## 使用
