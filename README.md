@@ -1,8 +1,8 @@
 # AutoDetect
 
 <p align="center">
-  <strong>DeepSeek Harness Web 官方侧边栏的 Windows 编码安全文件查看器</strong><br>
-  <sub>在官方文件标签页中查看和编辑脚本，同时保留原始编码、BOM 与换行格式。</sub>
+  <strong>DeepSeek Harness Web 官方侧边栏的 Windows 编码安全文件预览与编辑器</strong><br>
+  <sub>在官方文件标签页中预览和编辑工作区文件，同时保留原始编码、BOM 与换行格式。</sub>
 </p>
 
 <p align="center">
@@ -17,7 +17,9 @@
 
 ## 为什么需要 AutoDetect？
 
-Windows 工具链里，`.bat`、`.cmd`、`.ini`、`.vbs` 和 `.ps1` 经常混用 UTF-8、UTF-16、GBK、GB18030 与不同换行格式。AutoDetect 让这些文件直接出现在 Harness Web 的官方右侧文件标签页中，编辑后尽量按原格式写回。
+AutoDetect 是面向 DeepSeek Harness Web 官方侧边栏的文件预览与编辑器。它目前优先解决 Windows 工具链中文件编码、BOM 与换行格式容易损坏的问题，让工作区文件可以在官方右侧文件标签页中安全预览、编辑并按原格式写回。
+
+当前重点覆盖 `.bat`、`.cmd`、`.ini`、`.vbs` 和 `.ps1` 等常见文本文件；后续会在此基础上集成更多文件能力与工作区协作功能。
 
 ## 功能
 
