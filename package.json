@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Xiaoph123/dsh-autodetect.git"
+    "url": "git+https://github.com/Xiaoph123/dsh-autodetect.git"
   },
   "homepage": "https://github.com/Xiaoph123/dsh-autodetect#readme",
   "bugs": {
