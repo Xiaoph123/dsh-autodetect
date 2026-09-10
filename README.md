@@ -8,6 +8,7 @@
 <p align="center">
   <a href="https://github.com/Xiaoph123/dsh-autodetect"><img src="https://img.shields.io/badge/DeepSeek-Harness%20Web-4b6bfb" alt="DeepSeek Harness Web"></a>
   <a href="https://www.npmjs.com/package/dsh-autodetect"><img src="https://img.shields.io/npm/v/dsh-autodetect" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/dsh-autodetect"><img src="https://img.shields.io/npm/dm/dsh-autodetect" alt="npm downloads"></a>
   <a href="https://github.com/Xiaoph123/dsh-autodetect/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license"></a>
 </p>
 
@@ -33,7 +34,7 @@ Windows 工具链里，`.bat`、`.cmd`、`.ini`、`.vbs` 和 `.ps1` 经常混用
 
 ### 推荐：通过 npm 包安装
 
-先确认已安装 Node.js、Python 3.10+ 和 DeepSeek Harness Web。发布到 npm 后，推荐直接执行这一条命令：
+当前版本 `0.1.0` 已发布到 [npm](https://www.npmjs.com/package/dsh-autodetect)。先确认已安装 Node.js、Python 3.10+ 和 DeepSeek Harness Web，然后推荐直接执行这一条命令：
 
 ```powershell
 dsh plugin --profile web install dsh-autodetect --replace --yes
@@ -41,19 +42,12 @@ dsh plugin --profile web install dsh-autodetect --replace --yes
 
 `dsh` 会从 npm 获取 `dsh-autodetect`，并把它注册到 **Harness Web 官方侧边栏**。安装或更新后重启 Harness Web。
 
-如果你的 `dsh` 版本不支持从 npm 包名解析，也可以先下载包再使用本地目录：
+如果你的 `dsh` 版本不支持从 npm 包名解析，可以先下载包再使用本地目录：
 
 ```powershell
 npm install dsh-autodetect
 dsh plugin --profile web install .\node_modules\dsh-autodetect --replace --yes
 ```
-
-> 如果当前版本的 `dsh` CLI 不接受 npm 包名，请使用兼容方式：
->
-> ```powershell
-> git clone https://github.com/Xiaoph123/dsh-autodetect.git
-> dsh plugin --profile web install .\dsh-autodetect --replace --yes
-> ```
 
 ### 开发链接安装
 
@@ -123,7 +117,7 @@ node --check lib\index.js
 
 `npm run pack:check` 会检查最终 npm 包内容，不会把 `node_modules`、Python 缓存或备份文件打进去。
 
-## 发布
+## 维护者发布
 
 维护者登录 npm 后执行：
 
@@ -131,6 +125,8 @@ node --check lib\index.js
 npm login
 npm publish --access public
 ```
+
+当前公开包地址：<https://www.npmjs.com/package/dsh-autodetect>
 
 发布新版本前先更新 `package.json` 中的版本号，并运行：
 
