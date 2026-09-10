@@ -1,4 +1,5 @@
 node_modules/
+docs/
 python/__pycache__/
 tests/__pycache__/
 *.pyc

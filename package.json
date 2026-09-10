@@ -1,7 +1,7 @@
 {
   "name": "dsh-autodetect",
   "version": "0.2.0",
-  "description": "Encoding-safe Windows script viewer for the official DSH sidebar",
+  "description": "DeepSeek Harness Web 官方侧边栏的 Windows 编码安全文件预览与编辑器",
   "keywords": [
     "deepseek",
     "harness",
@@ -37,6 +37,7 @@
   },
   "files": [
     "lib",
+    "CHANGELOG.md",
     "README.md"
   ],
   "dsh": {
