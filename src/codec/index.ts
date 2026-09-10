@@ -1,0 +1,5 @@
+export * from './detect.js'
+export * from './text.js'
+export * from './encode.js'
+export { readFileMetadata as readFile } from './text.js'
+export { writeFile } from './encode.js'

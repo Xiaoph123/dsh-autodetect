@@ -34,7 +34,7 @@ Windows 工具链里，`.bat`、`.cmd`、`.ini`、`.vbs` 和 `.ps1` 经常混用
 
 ### 推荐：通过 npm 包安装
 
-当前版本 `0.1.0` 已发布到 [npm](https://www.npmjs.com/package/dsh-autodetect)。先确认已安装 Node.js、Python 3.10+ 和 DeepSeek Harness Web，然后推荐直接执行这一条命令：
+当前 TypeScript 版本 `0.2.0` 已发布到 [npm](https://www.npmjs.com/package/dsh-autodetect)。它不再需要 Python；先确认已安装 Node.js 和 DeepSeek Harness Web，然后推荐直接执行这一条命令：
 
 ```powershell
 dsh plugin --profile web install dsh-autodetect --replace --yes
@@ -57,20 +57,6 @@ cd dsh-autodetect
 dsh plugin --profile web install . --link --replace --yes
 ```
 
-### Python 依赖
-
-插件后端需要 `charset-normalizer`：
-
-```powershell
-py -3 -m pip install -r requirements.txt
-```
-
-如果 Harness 使用的不是默认 Python，可以指定：
-
-```powershell
-$env:AUTODETECT_PYTHON = 'C:\Path\To\python.exe'
-```
-
 ## 使用
 
 1. 启动 DeepSeek Harness Web。
@@ -85,7 +71,7 @@ $env:AUTODETECT_PYTHON = 'C:\Path\To\python.exe'
 插件由两个部分组成：
 
 - **Node.js Host**：注册 `/autodetect/api/read` 和 `/autodetect/api/write`，执行会话工作区校验、SHA-256 并发检查和备份。
-- **Python Codec Helper**：读取原始字节，检测编码、BOM 和换行格式，并按元数据原子写回。
+- **TypeScript Codec**：使用 Node.js Buffer 和 `iconv-lite` 读取原始字节，检测编码、BOM 和换行格式，并按元数据原子写回。
 
 客户端通过 Harness 官方 Sidebar slots 注册文件标签页，只匹配 `dsh-resource://file/**` 下的目标扩展名。
 
@@ -97,7 +83,7 @@ dsh-autodetect/
 │  ├─ index.js             # Host 路由和 Python Helper 调用
 │  └─ client.js            # Harness 官方 Sidebar 文件标签页
 ├─ python/
-│  └─ autodetect_codec.py  # 编码检测、读取和写入
+│  └─ codec/                # TypeScript 编码检测、读取和写入
 ├─ tests/
 │  ├─ test_codec.py        # 编码与文件写入测试
 │  └─ test_package.mjs     # npm 元数据和 README 回归测试
@@ -115,7 +101,7 @@ npm run pack:check
 node --check lib\index.js
 ```
 
-`npm run pack:check` 会检查最终 npm 包内容，不会把 `node_modules`、Python 缓存或备份文件打进去。
+`npm run pack:check` 会检查最终 npm 包内容，不会把 `node_modules`、Python 文件、缓存或备份文件打进去。
 
 ## 维护者发布
 
@@ -146,9 +132,9 @@ npm publish --access public
 
 这是 SHA-256 并发保护触发。重新打开文件、确认内容后再保存，避免覆盖其他程序的修改。
 
-### Python 依赖找不到
+### 旧版本为什么需要 Python？
 
-使用 Harness 实际调用的 Python 解释器安装 `requirements.txt`，必要时设置 `AUTODETECT_PYTHON`。
+`0.1.x` 是历史 Python 版本；从 `0.2.0` 开始，编码检测和文件写回已经迁移到 TypeScript/Node.js，不再需要 Python 或 `charset-normalizer`。
 
 ## 许可证
 

@@ -1,0 +1,13 @@
+:root {
+  --dsh-autodetect-border: var(--border-color, #ddd);
+  --dsh-autodetect-muted: var(--dsw-alias-label-tertiary, #888);
+}
+
+#dsh-autodetect-styles {
+  display: none;
+}
+
+.dsh-autodetect-editor {
+  min-width: 0;
+  min-height: 0;
+}

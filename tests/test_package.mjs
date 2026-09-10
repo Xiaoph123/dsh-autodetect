@@ -15,4 +15,12 @@ test('README states the official Harness Web sidebar boundary', () => {
   assert.match(readme, /DeepSeek Harness Web 官方侧边栏/)
   assert.match(readme, /不适配第三方.*侧边栏/)
   assert.match(readme, /npm install dsh-autodetect/)
+  assert.match(readme, /0\.2\.0/)
+  assert.match(readme, /不再需要 Python/)
+})
+
+test('package metadata has no Python runtime artifacts', () => {
+  assert.ok(!packageJson.files.some((entry) => entry.includes('python') || entry.includes('requirements')))
+  assert.equal(packageJson.dependencies['iconv-lite'], '^0.7.3')
+  assert.equal(packageJson.dependencies['charset-normalizer'], undefined)
 })
