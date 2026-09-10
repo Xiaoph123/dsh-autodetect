@@ -79,17 +79,17 @@ dsh plugin --profile web add .
 
 ```text
 dsh-autodetect/
-├─ lib/
-│  ├─ index.js             # Host 路由和 Python Helper 调用
-│  └─ client.js            # Harness 官方 Sidebar 文件标签页
-├─ python/
-│  └─ codec/                # TypeScript 编码检测、读取和写入
+├─ src/
+│  ├─ host/                 # Node.js Host 路由与会话工作区校验
+│  ├─ codec/                # TypeScript 编码检测、读取和写入
+│  └─ client/               # Harness 官方 Sidebar 文件标签页
+├─ lib/                     # 构建后的 JavaScript 文件
 ├─ tests/
-│  ├─ test_codec.py        # 编码与文件写入测试
+│  ├─ codec.test.mjs       # 编码与文件写入测试
 │  └─ test_package.mjs     # npm 元数据和 README 回归测试
 ├─ cordis.patch.yml        # DSH Web 插件挂载配置
 ├─ package.json
-├─ requirements.txt
+├─ tsconfig.json
 └─ README.md
 ```
 
@@ -101,7 +101,7 @@ npm run pack:check
 node --check lib\index.js
 ```
 
-`npm run pack:check` 会检查最终 npm 包内容，不会把 `node_modules`、Python 文件、缓存或备份文件打进去。
+`npm run pack:check` 会检查最终 npm 包内容，不会把 `node_modules`、源代码、测试、缓存或备份文件打进去。
 
 ## 维护者发布
 
@@ -142,4 +142,4 @@ npm publish --access public
 
 ## 反馈与贡献
 
-欢迎通过 [GitHub Issues](https://github.com/Xiaoph123/dsh-autodetect/issues) 提交问题。反馈时请注明 Harness Web 版本、Node.js/Python 版本，以及是否使用了官方侧边栏宿主。
+欢迎通过 [GitHub Issues](https://github.com/Xiaoph123/dsh-autodetect/issues) 提交问题。反馈时请注明 Harness Web 版本、Node.js 版本，以及是否使用了官方侧边栏宿主。
