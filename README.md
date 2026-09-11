@@ -36,7 +36,7 @@ AutoDetect 是面向 DeepSeek Harness Web 官方侧边栏的文件预览与编�
 
 ### 推荐：通过 npm 包安装
 
-当前 TypeScript 版本 `0.2.0` 已发布到 [npm](https://www.npmjs.com/package/dsh-autodetect)。它不再需要 Python；完整版本记录请见 [更新日志](CHANGELOG.md)。先确认已安装 Node.js 和 DeepSeek Harness Web，然后推荐直接执行这一条命令：
+当前 TypeScript 版本 `0.2.1` 已发布到 [npm](https://www.npmjs.com/package/dsh-autodetect)。它不再需要 Python；完整版本记录请见 [更新日志](CHANGELOG.md)。先确认已安装 Node.js 和 DeepSeek Harness Web，然后推荐直接执行这一条命令：
 
 ```powershell
 dsh plugin --profile web add dsh-autodetect

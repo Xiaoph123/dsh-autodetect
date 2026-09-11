@@ -13,7 +13,7 @@ test('build emits DSH host and client entrypoints', async () => {
 
 test('package metadata targets the Python-free 0.2 release', async () => {
   const packageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'))
-  assert.equal(packageJson.version, '0.2.0')
+  assert.equal(packageJson.version, '0.2.1')
   assert.equal(packageJson.main, './lib/index.js')
   assert.equal(packageJson.exports['./client'], './lib/client.js')
   assert.ok(!packageJson.files.some((entry) => entry.includes('python') || entry.includes('requirements')))

@@ -1,6 +1,6 @@
 {
   "name": "dsh-autodetect",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "DeepSeek Harness Web 官方侧边栏的 Windows 编码安全文件预览与编辑器",
   "keywords": [
     "deepseek",
