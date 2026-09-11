@@ -36,3 +36,13 @@ await build({
   banner: { js: `(() => { const css = ${JSON.stringify(css)}; if (typeof document !== 'undefined' && !document.getElementById('dsh-autodetect-styles')) { const style = document.createElement('style'); style.id = 'dsh-autodetect-styles'; style.textContent = css; document.head.appendChild(style) } })();` },
   sourcemap: false,
 })
+
+await build({
+  entryPoints: ['src/client/conversation.ts'],
+  outfile: 'lib/conversation.js',
+  bundle: true,
+  format: 'esm',
+  platform: 'node',
+  target: 'node18',
+  sourcemap: false,
+})

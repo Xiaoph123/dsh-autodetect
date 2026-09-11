@@ -33,3 +33,8 @@ test('package metadata has no Python runtime artifacts', () => {
   assert.equal(packageJson.dependencies['iconv-lite'], '^0.7.3')
   assert.equal(packageJson.dependencies['charset-normalizer'], undefined)
 })
+
+test('package declares the official conversation client module', () => {
+  assert.ok(packageJson.dsh.client.inject.includes('@deepseek-ai/dsh-client-ui-conversation'))
+  assert.equal(packageJson.peerDependencies['@deepseek-ai/dsh-client-ui-conversation'], '*')
+})

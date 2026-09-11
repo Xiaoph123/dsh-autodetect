@@ -1,10 +1,12 @@
+import { appendToConversation } from './conversation'
+
 window.__ModuleLoader__.load({
   id: 'dsh-autodetect',
   factory: (require) => {
     const React = require('react')
     const { createPortal } = require('react-dom')
     const { useEffect, useLayoutEffect, useMemo, useRef, useState } = React
-    const inject = ['slots', 'sidebarRightTabs']
+    const inject = ['slots', 'sidebarRightTabs', 'conversation', 'sessions']
     const EXTENSIONS = ['bat', 'cmd', 'ini', 'vbs', 'ps1']
     const style = { position: 'relative', display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0, fontFamily: 'ui-monospace, Consolas, monospace' }
     const editorLayoutStyle = { display: 'flex', flex: 1, minHeight: 0, overflow: 'hidden', background: 'transparent' }
@@ -32,21 +34,6 @@ window.__ModuleLoader__.load({
       const rel = relativePath(cwd, path)
       const header = last > first ? `${rel}:${first}-${last}` : `${rel}:${first}`
       return selected.length > 500 ? header : '```' + header + '\n' + selected + '\n```'
-    }
-
-    function appendToConversation(ctx, sessionId, text) {
-      try {
-        const scope = ctx?.sessions?.scope?.(sessionId)
-        const conversation = ctx?.get?.('conversation')
-        if (!scope || !conversation) return false
-        const input = conversation.input.for(scope)
-        const draft = input.state.getSnapshot().draft
-        input.setDraft(draft.trim() ? `${draft} ${text}` : text)
-        return true
-      } catch (error) {
-        console.warn('[dsh-autodetect] 添加选区到对话失败:', error)
-        return false
-      }
     }
 
     function endpoint(path, scope) {
@@ -193,7 +180,16 @@ window.__ModuleLoader__.load({
       const addSelection = () => {
         const current = popupRef.current
         if (!current) return
-        if (appendToConversation(props.ctx, props.scope?.sessionId, current.insert)) hideSelection()
+        const ctx = props.ctx
+        const sessionScope = ctx?.sessions?.scope?.(props.scope?.sessionId)
+        const conversation = ctx?.conversation || ctx?.get?.('conversation')
+        if (appendToConversation(conversation, sessionScope, current.insert)) hideSelection()
+      }
+
+      const handleAddSelectionPointerDown = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        addSelection()
       }
 
       useEffect(() => {
@@ -278,7 +274,7 @@ window.__ModuleLoader__.load({
           saveState.startsWith('failed') && React.createElement('span', null, saveState),
         ),
         selection && createPortal(
-          React.createElement('button', { ref: selectionButtonRef, type: 'button', style: { ...selectionButtonStyle, left: selection.left, top: selection.top }, onMouseDown: (event) => { event.preventDefault() }, onClick: addSelection }, '添加到对话'),
+          React.createElement('button', { ref: selectionButtonRef, type: 'button', style: { ...selectionButtonStyle, left: selection.left, top: selection.top }, onPointerDown: handleAddSelectionPointerDown, onClick: (event) => { event.preventDefault(); event.stopPropagation() } }, '添加到对话'),
           document.body,
         ),
         React.createElement('div', { style: editorLayoutStyle },
@@ -286,6 +282,28 @@ window.__ModuleLoader__.load({
           React.createElement('div', { ref: editorRef, contentEditable: true, suppressContentEditableWarning: true, spellCheck: false, role: 'textbox', tabIndex: 0, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, onKeyUp: updateSelection, onScroll: syncGutter, onInput: (event) => { setContent(event.currentTarget.textContent || ''); setDirty(true); updateSelection(undefined) }, style: editorStyle }, content),
         ),
       )
+    }
+
+    class AutoDetectErrorBoundary extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = { error: null }
+      }
+
+      static getDerivedStateFromError(error) {
+        return { error }
+      }
+
+      componentDidCatch(error) {
+        console.error('[dsh-autodetect] 文件标签页渲染失败:', error)
+      }
+
+      render() {
+        if (this.state.error) {
+          return React.createElement('div', { style: { padding: '16px', color: '#c62828', fontFamily: 'system-ui, sans-serif', whiteSpace: 'pre-wrap' } }, `文件预览加载失败：${this.state.error instanceof Error ? this.state.error.message : String(this.state.error)}`)
+        }
+        return this.props.children
+      }
     }
 
     function apply(ctx) {
@@ -343,7 +361,7 @@ window.__ModuleLoader__.load({
       ctx.effect(() => ctx.slots.inject('sidebar.right.pane.tab', () => ctx.slots.register({
         name: 'sidebar.right.pane.tab',
         key: 'dsh-autodetect',
-      }, OfficialAutoDetectView)), 'dsh-autodetect: tab body')
+      }, (props) => React.createElement(AutoDetectErrorBoundary, null, React.createElement(OfficialAutoDetectView, props)))), 'dsh-autodetect: tab body')
     }
 
     return { apply, inject }

@@ -8,6 +8,9 @@
 
 - 编码检测、读取与写回逻辑从 Python 迁移至 TypeScript 和 Node.js，不再依赖 Python 或 `charset-normalizer`。
 - 插件定位从脚本查看器升级为工作区文件预览与编辑器，后续将继续集成更多文件能力与工作区协作功能。
+- 修复选中文本点击“添加到对话”无响应的问题，改用官方 conversation/session 注入接口将内容写入当前对话草稿。
+- 改进“添加到对话”按钮事件处理：在指针按下阶段提交，避免浏览器 selectionchange 先卸载按钮导致点击事件丢失。
+- 按照官方 conversation 插件契约，通过 `ctx.sessions.scope(...)` 和 `conversation.input.for(...)` 写入当前会话草稿。
 
 ### 新增
 
